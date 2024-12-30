@@ -224,6 +224,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         public MainPageViewModel(GuiDesignOptions options)
         {
             ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
+            CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
             ClientVersion = "0.0.1";
             ArchipelagoVersion = "0.5.0";
 
@@ -264,6 +265,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 LogList.Add(new LogListItem(output));
+                
             });
             
         }

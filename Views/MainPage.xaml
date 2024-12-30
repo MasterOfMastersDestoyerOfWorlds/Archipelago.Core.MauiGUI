@@ -14,8 +14,8 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ListView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding LogList}">
-                    <ListView.ItemTemplate>
+                <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding LogList}">
+                    <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:LogListItem">
                             <ViewCell>
                                 <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" Padding="5">
@@ -35,8 +35,8 @@
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <Grid Grid.Row="1" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*"/>

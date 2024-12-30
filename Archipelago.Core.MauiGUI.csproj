@@ -8,11 +8,18 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
+    <Version>0.0.3</Version>
+    <Authors>ArsonAssassin</Authors>
+    <Product>Archipelago.Core.MauiGUI</Product>
+    <PackageId>Archipelago.Core.MauiGUI</PackageId>
+    <Description>A class library for providing a GUI for Archipelago.Core.</Description>
+    <RepositoryUrl>https://github.com/ArsonAssassin/Archipelago.Core.MauiGUI</RepositoryUrl>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
-
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Archipelago.Core" Version="0.1.12" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
