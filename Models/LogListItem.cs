@@ -14,9 +14,9 @@ namespace Archipelago.Core.MauiGUI.Models
 {
     public class LogListItem : ViewModelBase
     {
-        private ObservableCollection<Span> _textSpans = new ObservableCollection<Span>();
+        private ObservableCollection<TextSpan> _textSpans = new ObservableCollection<TextSpan>();
 
-        public ObservableCollection<Span> TextSpans
+        public ObservableCollection<TextSpan> TextSpans
         {
             get { return _textSpans; }
             set
@@ -31,24 +31,45 @@ namespace Archipelago.Core.MauiGUI.Models
 
         public LogListItem(string text)
         {
-            TextSpans = new ObservableCollection<Span>()
+            TextSpans = new ObservableCollection<TextSpan>()
             {
-                new Span(){Text = text},
+                new TextSpan(){Text = text},
             };
         }
-        public LogListItem(IEnumerable<Span> spans)
+        public LogListItem(string text, Color color)
+        {
+            TextSpans = new ObservableCollection<TextSpan>()
+            {
+                new TextSpan(){Text = text, TextColor = color},
+            };
+        }
+        public LogListItem(IEnumerable<TextSpan> spans)
         {
             TextSpans = spans.ToObservableCollection();
         }
+        public LogListItem(IEnumerable<Span> spans)
+        {
+            var result =  new ObservableCollection<TextSpan>();
+            foreach (var span in spans)
+            {
+                var textspan = new TextSpan();
+                textspan.Text = span.Text;
+                textspan.TextColor = span.TextColor;
+                result.Add(textspan);
+                result.Add(new TextSpan() { Text = " ", TextColor = Color.FromRgb(255, 255, 255) });
+            }
+            TextSpans = result;
+        }
         public LogListItem(APMessageModel message)
         {
-            TextSpans = new ObservableCollection<Span>();
+            TextSpans = new ObservableCollection<TextSpan>();
             foreach (var part in message.Parts)
             {
-                var span = new Span();
+                var span = new TextSpan();
                 span.Text = part.Text;
                 span.TextColor = Color.FromRgb(part.Color.R, part.Color.G, part.Color.B);
                 TextSpans.Add(span);
+                TextSpans.Add(new TextSpan() { Text = " ", TextColor = Color.FromRgb(255,255,255)});
             }
         }
     }

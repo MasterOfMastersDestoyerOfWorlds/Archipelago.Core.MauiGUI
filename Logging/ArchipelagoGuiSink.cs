@@ -8,17 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
-using Newtonsoft.Json;
 using Windows.UI.WebUI;
+using System.Text.Json;
 
 namespace Archipelago.Core.MauiGUI.Logging
 {
     public class ArchipelagoGuiSink : ILogEventSink
     {
         private LogEventLevel _logLevel;
-        private Action<string> _outputEvent;
-        private Action<APMessageModel> _archipelagoEventLogHandler;
-        public ArchipelagoGuiSink(Action<string> outputEvent, Action<APMessageModel> archipelagoEventLogHandler, LogEventLevel level = LogEventLevel.Information)
+        private Action<string, LogEventLevel> _outputEvent;
+        private Action<APMessageModel, LogEventLevel> _archipelagoEventLogHandler;
+        public ArchipelagoGuiSink(Action<string, LogEventLevel> outputEvent, Action<APMessageModel, LogEventLevel> archipelagoEventLogHandler, LogEventLevel level = LogEventLevel.Information)
         {
             _logLevel = level;
             _outputEvent = outputEvent;
@@ -27,26 +27,33 @@ namespace Archipelago.Core.MauiGUI.Logging
         public void Emit(LogEvent logEvent)
         {
             try
-            {                
-                var logMessage = JsonConvert.DeserializeObject<APMessageModel>(logEvent.MessageTemplate.Text);
-                
+            {
+                var message = logEvent.MessageTemplate.Text;
+                if (message.StartsWith('{') || message.StartsWith('['))
+                {
 
-                _archipelagoEventLogHandler?.Invoke(logMessage);
-                return;
+                    var logMessage = JsonSerializer.Deserialize<APMessageModel>(message);
+
+
+                    _archipelagoEventLogHandler?.Invoke(logMessage, logEvent.Level);
+
+                    return;
+                }
             }
             catch (Exception ex)
+            {//not a json
+            }
+            if (logEvent.Level >= _logLevel)
             {
-            }//not a json
-            if(logEvent.Level <= _logLevel)
-            {
-                _outputEvent?.Invoke(logEvent.RenderMessage());
+                var msg = logEvent.RenderMessage();
+                _outputEvent?.Invoke(logEvent.RenderMessage(), logEvent.Level);
             }
         }
     }
     public static class ArchipelagoGuiSinkExtensions
     {
         public static LoggerConfiguration ArchipelagoGuiSink(
-                  this LoggerSinkConfiguration loggerConfiguration, Action<string> outputEvent, Action<APMessageModel> archipelagoEventLogHandler, LogEventLevel level = LogEventLevel.Information)
+                  this LoggerSinkConfiguration loggerConfiguration, Action<string, LogEventLevel> outputEvent, Action<APMessageModel, LogEventLevel> archipelagoEventLogHandler, LogEventLevel level = LogEventLevel.Information)
         {
             return loggerConfiguration.Sink(new ArchipelagoGuiSink(outputEvent, archipelagoEventLogHandler, level));
         }

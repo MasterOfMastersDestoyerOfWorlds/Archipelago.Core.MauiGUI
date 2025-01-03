@@ -8,7 +8,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-    <Version>0.0.3</Version>
+    <Version>0.0.10</Version>
     <Authors>ArsonAssassin</Authors>
     <Product>Archipelago.Core.MauiGUI</Product>
     <PackageId>Archipelago.Core.MauiGUI</PackageId>
@@ -21,9 +21,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Archipelago.Core" Version="0.1.12" />
+		<PackageReference Include="Archipelago.Core" Version="0.2.12" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="System.Text.Json" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

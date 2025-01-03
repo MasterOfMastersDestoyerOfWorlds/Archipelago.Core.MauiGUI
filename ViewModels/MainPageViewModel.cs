@@ -1,6 +1,8 @@
 ﻿using Archipelago.Core.MauiGUI.Logging;
 using Archipelago.Core.MauiGUI.Models;
+using Archipelago.Core.MauiGUI.Utils;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,9 +29,44 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         private Color _buttonTextColor;
         private ICommand _commandSentCommand;
         private string _commandText;
+        private string _selectedLogLevel;
+        private bool _connectButtonEnabled;
+        private ObservableCollection<LogListItem> _hintList = new ObservableCollection<LogListItem>();
+        private ObservableCollection<LogListItem> _itemList = new ObservableCollection<LogListItem>();
 
+        public ObservableCollection<string> LogEventLevels { get; private set; } =Enum.GetNames(typeof(LogEventLevel)).ToObservableCollection();
+        public string SelectedLogLevel
+        {
+            get
+            {
+                var minLevel = LoggerConfig.GetMinimumLevel();
+                return LogEventLevels.Single(x => x.ToLower() == LoggerConfig.GetMinimumLevel().ToString().ToLower());
+            }
+            set
+            {
+                if (_selectedLogLevel != value)
+                {
+                    LoggerConfig.SetLogLevel(Enum.Parse<LogEventLevel>(value));
+                    OnPropertyChanged();
+                }
+            }
+        }
         public event EventHandler<ConnectClickedEventArgs> ConnectClicked;
         public event EventHandler<ArchipelagoCommandEventArgs> CommandReceived;
+        public bool ConnectButtonEnabled
+        {
+            get
+            {
+                return _connectButtonEnabled;
+            }
+            set
+            {
+                if (_connectButtonEnabled != value)
+                {
+                    _connectButtonEnabled = value; OnPropertyChanged();
+                }
+            }
+        }
         public ICommand ConnectClickedCommand
         {
             get
@@ -67,6 +104,32 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 if (_logList != value)
                 {
                     _logList = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<LogListItem> HintList
+        {
+            get { return _hintList; }
+            set
+            {
+                if (_hintList != value)
+                {
+                    _hintList = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<LogListItem> ItemList
+        {
+            get { return _itemList; }
+            set
+            {
+                if (_itemList != value)
+                {
+                    _itemList = value;
                     OnPropertyChanged();
                 }
             }
@@ -225,7 +288,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         {
             ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
             CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
-            ClientVersion = "0.0.1";
+            ClientVersion = Helpers.GetAppVersion();
             ArchipelagoVersion = "0.5.0";
 
             if (options.BackgroundColor != null)
@@ -249,33 +312,56 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 TextColor = options.TextColor;
             }
 
-            LoggerConfig.Initialize((e) => WriteLine(e), (a)=> LogMessage(a));
+            LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => LogMessage(a, l));
         }
         public MainPageViewModel()
         {
             ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
             CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
-            ClientVersion = "0.0.1";
+            ClientVersion = Helpers.GetAppVersion();
             ArchipelagoVersion = "0.5.0";
 
-            LoggerConfig.Initialize((e) => WriteLine(e), (a) => LogMessage(a));
+            LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => LogMessage(a, l));
         }
-        private void WriteLine(string output)
+        private void WriteLine(string output, LogEventLevel level)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                LogList.Add(new LogListItem(output));
-                
+                LogList.Add(new LogListItem(output, GetColorForLogLevel(level)));
+
             });
-            
+
         }
-        private void LogMessage(APMessageModel output)
+        private void LogMessage(APMessageModel output, LogEventLevel level)
         {
+
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 LogList.Add(new LogListItem(output));
             });
 
+        }
+        private Color GetColorForLogLevel(LogEventLevel level)
+        {
+            Color logColor;
+            switch (level)
+            {
+                case LogEventLevel.Error:
+                    logColor = Color.FromRgb(255, 0, 0);
+                    break;
+                case LogEventLevel.Warning:
+                    logColor = Color.FromRgb(255, 255, 0);
+                    break;
+                case LogEventLevel.Information:
+                default:
+                    logColor = Color.FromRgb(255, 255, 255);
+                    break;
+                case LogEventLevel.Debug:
+                case LogEventLevel.Verbose:
+                    logColor = Color.FromRgb(173, 216, 230);
+                    break;
+            }
+            return logColor;
         }
     }
 }

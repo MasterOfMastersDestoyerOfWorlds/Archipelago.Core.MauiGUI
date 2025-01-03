@@ -13,10 +13,10 @@ namespace Archipelago.Core.MauiGUI.Logging
     public static class LoggerConfig
     {
         private static ILogger _logger;
-        private static Action<string> _outputAction;
-        private static Action<APMessageModel> _archipelagoEventLogHandler;
-
-        public static void Initialize(Action<string> mainFormWriter,Action<APMessageModel> archipelagoEventLogHandler)
+        private static Action<string, LogEventLevel> _outputAction;
+        private static Action<APMessageModel, LogEventLevel> _archipelagoEventLogHandler;
+        private static LogEventLevel _minimumLevel = LogEventLevel.Information;
+        public static void Initialize(Action<string, LogEventLevel> mainFormWriter,Action<APMessageModel, LogEventLevel> archipelagoEventLogHandler)
         {
             _outputAction = mainFormWriter;
             _archipelagoEventLogHandler = archipelagoEventLogHandler;
@@ -26,15 +26,22 @@ namespace Archipelago.Core.MauiGUI.Logging
             _logger = loggerConfiguration.CreateLogger();
             Log.Logger = _logger;
         }
+        public static LogEventLevel GetMinimumLevel()
+        {
+            return _minimumLevel;
+        }
         public static void SetLogLevel(LogEventLevel level)
         {
+            _minimumLevel = level;
             var loggerConfiguration = new LoggerConfiguration()
-                .WriteTo.ArchipelagoGuiSink(_outputAction, _archipelagoEventLogHandler, level);
+            .MinimumLevel.Is(level)
+            .WriteTo.ArchipelagoGuiSink(_outputAction, _archipelagoEventLogHandler, level);
             _logger = loggerConfiguration.CreateLogger();
             Log.Logger = _logger;
         }
-        public static LoggerConfiguration GetLoggerConfiguration(Action<string> mainFormWriter, Action<APMessageModel> archipelagoEventLogHandler)
+        public static LoggerConfiguration GetLoggerConfiguration(Action<string, LogEventLevel> mainFormWriter, Action<APMessageModel, LogEventLevel> archipelagoEventLogHandler)
         {
+            _minimumLevel = LogEventLevel.Information;
             return new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.ArchipelagoGuiSink(mainFormWriter, archipelagoEventLogHandler);
