@@ -5,7 +5,7 @@
             x:Class="Archipelago.Core.MauiGUI.MainPage" Title="DSAP" Shell.NavBarIsVisible="False" IsGestureEnabled="True" FlyoutLayoutBehavior="Popover">
     <FlyoutPage.Detail>
         <TabbedPage>
-            <ContentPage Title="Log">
+            <ContentPage Title="Log" BackgroundColor="{Binding BackgroundColor}" BackgroundImageSource="{Binding BackgroundImage}">
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -21,7 +21,7 @@
                                     <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
                                               HorizontalOptions="Start">
                                         <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout Orientation="Horizontal"/>
+                                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
                                         </CollectionView.ItemsLayout>
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="models:TextSpan">

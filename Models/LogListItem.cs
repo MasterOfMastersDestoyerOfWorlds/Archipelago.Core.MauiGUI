@@ -56,7 +56,6 @@ namespace Archipelago.Core.MauiGUI.Models
                 textspan.Text = span.Text;
                 textspan.TextColor = span.TextColor;
                 result.Add(textspan);
-                result.Add(new TextSpan() { Text = " ", TextColor = Color.FromRgb(255, 255, 255) });
             }
             TextSpans = result;
         }
@@ -69,7 +68,6 @@ namespace Archipelago.Core.MauiGUI.Models
                 span.Text = part.Text;
                 span.TextColor = Color.FromRgb(part.Color.R, part.Color.G, part.Color.B);
                 TextSpans.Add(span);
-                TextSpans.Add(new TextSpan() { Text = " ", TextColor = Color.FromRgb(255,255,255)});
             }
         }
     }
