@@ -209,66 +209,6 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 }
             }
         }
-        public Color BackgroundColor
-        {
-            get
-            {
-                return _backgroundColor;
-            }
-            set
-            {
-                if (_backgroundColor != value)
-                {
-                    _backgroundColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public Color TextColor
-        {
-            get
-            {
-                return _textColor;
-            }
-            set
-            {
-                if (_textColor != value)
-                {
-                    _textColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public Color ButtonColor
-        {
-            get
-            {
-                return _buttonColor;
-            }
-            set
-            {
-                if (_buttonColor != value)
-                {
-                    _buttonColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public Color ButtonTextColor
-        {
-            get
-            {
-                return _buttonTextColor;
-            }
-            set
-            {
-                if (_buttonTextColor != value)
-                {
-                    _buttonTextColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         public string ArchipelagoVersion
         {
             get
@@ -284,42 +224,12 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 }
             }
         }
-        public MainPageViewModel(GuiDesignOptions options)
+        public MainPageViewModel(string archipelagoVersion = "0.5.1")
         {
             ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
             CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
             ClientVersion = Helpers.GetAppVersion();
-            ArchipelagoVersion = "0.5.0";
-
-            if (options.BackgroundColor != null)
-            {
-                BackgroundColor = options.BackgroundColor;
-            }
-            if (options.ButtonColor != null)
-            {
-                ButtonColor = options.ButtonColor;
-                ButtonColor = options.ButtonColor;
-            }
-            if (options.ButtonTextColor != null)
-            {
-                ButtonTextColor = options.ButtonTextColor;
-                ButtonTextColor = options.ButtonTextColor;
-            }
-            if (options.TextColor != null)
-            {
-                TextColor = options.TextColor;
-                TextColor = options.TextColor;
-                TextColor = options.TextColor;
-            }
-
-            LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => LogMessage(a, l));
-        }
-        public MainPageViewModel()
-        {
-            ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
-            CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
-            ClientVersion = Helpers.GetAppVersion();
-            ArchipelagoVersion = "0.5.0";
+            ArchipelagoVersion = archipelagoVersion;
 
             LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => LogMessage(a, l));
         }

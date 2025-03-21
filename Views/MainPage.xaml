@@ -2,10 +2,10 @@
 <FlyoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
             xmlns:models="clr-namespace:Archipelago.Core.MauiGUI.Models"
-            x:Class="Archipelago.Core.MauiGUI.MainPage" Title="DSAP" Shell.NavBarIsVisible="False" IsGestureEnabled="True" FlyoutLayoutBehavior="Popover">
+            x:Class="Archipelago.Core.MauiGUI.MainPage" Title="DSAP" Shell.NavBarIsVisible="False" IsGestureEnabled="True" FlyoutLayoutBehavior="Popover" BackgroundColor="#202020">
     <FlyoutPage.Detail>
-        <TabbedPage>
-            <ContentPage Title="Log" BackgroundColor="{Binding BackgroundColor}" BackgroundImageSource="{Binding BackgroundImage}">
+        <TabbedPage BackgroundColor="#202020">
+            <ContentPage Title="Log" BackgroundColor="#202020">
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -17,20 +17,22 @@
                     <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding LogList}" ItemsUpdatingScrollMode="KeepLastItemInView">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
-                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="5">
-                                    <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
+                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
+                                    <Frame VerticalOptions="CenterAndExpand"  HorizontalOptions="Start" BackgroundColor="#373737" Padding="5" Margin="0" HasShadow="True">
+                                        <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
                                               HorizontalOptions="Start">
-                                        <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
-                                        </CollectionView.ItemsLayout>
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate x:DataType="models:TextSpan">
-                                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:TextSpan">
+                                                    <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
                                                    TextColor="{Binding TextColor}" HorizontalTextAlignment="Start"
                                                    LineBreakMode="WordWrap"/>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Frame>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -40,13 +42,13 @@
                             <ColumnDefinition Width="5*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Entry Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Text="{Binding CommandText, Mode=TwoWay}" ReturnCommand="{Binding CommandSentCommand}"/>
-                        <Button Grid.Column="1" Text="Send" Command="{Binding CommandSentCommand}" BackgroundColor="{Binding ButtonColor}" TextColor="{Binding ButtonTextColor}"/>
+                        <Entry Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Text="{Binding CommandText, Mode=TwoWay}" ReturnCommand="{Binding CommandSentCommand}"  TextColor="Black" BackgroundColor="DarkGrey"/>
+                        <Button Grid.Column="1" Text="Send" Command="{Binding CommandSentCommand}" BackgroundColor="DarkGrey" TextColor="Black"/>
                     </Grid>
                 </Grid>
             </ContentPage>
 
-            <ContentPage Title="Hints">
+            <ContentPage Title="Hints" BackgroundColor="#202020">
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -54,30 +56,33 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
                     <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding HintList}" ItemsUpdatingScrollMode="KeepLastItemInView">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
-                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="5">
-                                    <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
+                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
+                                    <Frame VerticalOptions="CenterAndExpand"  HorizontalOptions="Start" BackgroundColor="#373737" Padding="5" Margin="0" HasShadow="True">
+                                        <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
                                               HorizontalOptions="Start">
-                                        <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout Orientation="Horizontal"/>
-                                        </CollectionView.ItemsLayout>
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate x:DataType="models:TextSpan">
-                                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal"/>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:TextSpan">
+                                                    <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
                                                    TextColor="{Binding TextColor}" HorizontalTextAlignment="Start"
                                                    LineBreakMode="WordWrap"/>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Frame>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
             </ContentPage>
-            <ContentPage Title="Received Items">
+            <ContentPage Title="Received Items" BackgroundColor="#202020">
                 <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -88,20 +93,22 @@
                     <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding ItemList}" ItemsUpdatingScrollMode="KeepLastItemInView">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
-                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="5">
-                                    <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
+                                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
+                                    <Frame VerticalOptions="CenterAndExpand"  HorizontalOptions="Start" BackgroundColor="#373737" Padding="5" Margin="0" HasShadow="True">
+                                        <CollectionView  VerticalOptions="CenterAndExpand" ItemsSource="{Binding Path=TextSpans}" 
                                               HorizontalOptions="Start">
-                                        <CollectionView.ItemsLayout>
-                                            <LinearItemsLayout Orientation="Horizontal"/>
-                                        </CollectionView.ItemsLayout>
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate x:DataType="models:TextSpan">
-                                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
-                                                   TextColor="{Binding TextColor}" HorizontalTextAlignment="Start"
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Horizontal"/>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:TextSpan">
+                                                    <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Start" Text="{Binding Path=Text}" 
+                                                   TextColor="White" HorizontalTextAlignment="Start"
                                                    LineBreakMode="WordWrap"/>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Frame>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -112,10 +119,12 @@
         </TabbedPage>
     </FlyoutPage.Detail>
     <FlyoutPage.Flyout>
-        <ContentPage Title="Settings">
-            <StackLayout>
-                <Label Text="Settings" FontSize="Medium"/>
-                <Grid VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" ColumnSpacing="10" RowSpacing="20" Padding="10,20,10,0">
+        <ContentPage Title="Settings" BackgroundColor="#202020">
+            <StackLayout VerticalOptions="StartAndExpand">
+                <Frame VerticalOptions="StartAndExpand"  HorizontalOptions="Start" BackgroundColor="#373737" Padding="0" Margin="0" HasShadow="False">
+                    <Label Text="Settings" FontSize="Medium"/>
+                </Frame>
+                <Grid VerticalOptions="Fill" HorizontalOptions="FillAndExpand" ColumnSpacing="10" RowSpacing="20" Padding="10,20,10,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="4*"/>
@@ -127,23 +136,23 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center" Text="Host: " FontSize="12"/>
-                    <Entry Grid.Row="0" Grid.Column="1" Placeholder="Enter Host e.g. Archipelago.gg:38281" FontSize="12" Text="{Binding Host, Mode=TwoWay}"/>
+                    <Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center" Text="Host: " FontSize="12" TextColor="White"/>
+                    <Entry Grid.Row="0" Grid.Column="1" Placeholder="Enter Host e.g. Archipelago.gg:38281" FontSize="12" Text="{Binding Host, Mode=TwoWay}"  TextColor="Black" BackgroundColor="DarkGrey"/>
 
-                    <Label Grid.Row="1" Grid.Column="0" VerticalOptions="Center" Text="Slot: " FontSize="12"/>
-                    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Enter Slot e.g. Player1" FontSize="12" Text="{Binding Slot, Mode=TwoWay}"/>
+                    <Label Grid.Row="1" Grid.Column="0" VerticalOptions="Center" Text="Slot: " FontSize="12" TextColor="White"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Enter Slot e.g. Player1" FontSize="12" Text="{Binding Slot, Mode=TwoWay}" TextColor="Black" BackgroundColor="DarkGrey"/>
 
-                    <Label Grid.Row="2" Grid.Column="0" VerticalOptions="Center" Text="Password: " FontSize="12"/>
-                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Enter Password" IsPassword="True" FontSize="12" Text="{Binding Password, Mode=TwoWay}"/>
+                    <Label Grid.Row="2" Grid.Column="0" VerticalOptions="Center" Text="Password: " FontSize="12" TextColor="White"/>
+                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Enter Password" IsPassword="True" FontSize="12" Text="{Binding Password, Mode=TwoWay}" TextColor="Black" BackgroundColor="DarkGrey"/>
 
-                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Connect" Command="{Binding ConnectClickedCommand}" IsEnabled="{Binding ConnectButtonEnabled}" BackgroundColor="{Binding ButtonColor}" TextColor="{Binding ButtonTextColor}"/>
+                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Connect" Command="{Binding ConnectClickedCommand}" IsEnabled="{Binding ConnectButtonEnabled}" BackgroundColor="DarkGrey" TextColor="Black"/>
 
-                    <Label Grid.Row="4" Grid.Column="0" VerticalOptions="Center" Text="LogLevel: " FontSize="12"/>
-                    <Picker Grid.Row="4" Grid.Column="1" ItemsSource="{Binding LogEventLevels}" SelectedItem="{Binding SelectedLogLevel}"/>
+                    <Label Grid.Row="4" Grid.Column="0" VerticalOptions="Center" Text="LogLevel: " FontSize="12" TextColor="White"/>
+                    <Picker Grid.Row="4" Grid.Column="1" ItemsSource="{Binding LogEventLevels}" SelectedItem="{Binding SelectedLogLevel}" TextColor="Black" BackgroundColor="DarkGrey"/>
                 </Grid>
-                <StackLayout>
-                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ClientVersion, StringFormat='Client Version: {0}' }"/>
-                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ArchipelagoVersion, StringFormat='Archipelago Version: {0}' }"/>
+                <StackLayout VerticalOptions="End" Spacing="10">
+                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ClientVersion, StringFormat='Client Version: {0}' }" TextColor="White"/>
+                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ArchipelagoVersion, StringFormat='Archipelago Version: {0}' }" TextColor="White"/>
                 </StackLayout>
             </StackLayout>
         </ContentPage>
