@@ -153,6 +153,7 @@
                 <StackLayout VerticalOptions="End" Spacing="10">
                     <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ClientVersion, StringFormat='Client Version: {0}' }" TextColor="White"/>
                     <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ArchipelagoVersion, StringFormat='Archipelago Version: {0}' }" TextColor="White"/>
+                    <Button Text="UNSTUCK" Command="{Binding UnstuckClickedCommand}" BackgroundColor="DarkGrey" TextColor="Black"/>
                 </StackLayout>
             </StackLayout>
         </ContentPage>

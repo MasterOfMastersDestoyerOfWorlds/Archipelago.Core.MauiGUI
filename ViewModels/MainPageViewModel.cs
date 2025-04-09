@@ -33,6 +33,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         private bool _connectButtonEnabled;
         private ObservableCollection<LogListItem> _hintList = new ObservableCollection<LogListItem>();
         private ObservableCollection<LogListItem> _itemList = new ObservableCollection<LogListItem>();
+        private ICommand _unstuckClickedCommand;
 
         public ObservableCollection<string> LogEventLevels { get; private set; } =Enum.GetNames(typeof(LogEventLevel)).ToObservableCollection();
         public string SelectedLogLevel
@@ -53,6 +54,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         }
         public event EventHandler<ConnectClickedEventArgs> ConnectClicked;
         public event EventHandler<ArchipelagoCommandEventArgs> CommandReceived;
+        public event EventHandler UnstuckClicked;
         public bool ConnectButtonEnabled
         {
             get
@@ -64,6 +66,20 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 if (_connectButtonEnabled != value)
                 {
                     _connectButtonEnabled = value; OnPropertyChanged();
+                }
+            }
+        }
+        public ICommand UnstuckClickedCommand
+        {
+            get
+            {
+                return _unstuckClickedCommand;
+            }
+            set
+            {
+                if (_unstuckClickedCommand != value)
+                {
+                    _unstuckClickedCommand = value; OnPropertyChanged();
                 }
             }
         }
@@ -228,6 +244,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         {
             ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
             CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
+            UnstuckClickedCommand = new Command(() => { UnstuckClicked?.Invoke(this, EventArgs.Empty); });
             ClientVersion = Helpers.GetAppVersion();
             ArchipelagoVersion = archipelagoVersion;
 
