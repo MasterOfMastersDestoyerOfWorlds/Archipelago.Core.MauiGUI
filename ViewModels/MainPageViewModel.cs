@@ -34,6 +34,7 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         private ObservableCollection<LogListItem> _hintList = new ObservableCollection<LogListItem>();
         private ObservableCollection<LogListItem> _itemList = new ObservableCollection<LogListItem>();
         private ICommand _unstuckClickedCommand;
+        private bool _unstuckVisible;
 
         public ObservableCollection<string> LogEventLevels { get; private set; } =Enum.GetNames(typeof(LogEventLevel)).ToObservableCollection();
         public string SelectedLogLevel
@@ -55,6 +56,20 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         public event EventHandler<ConnectClickedEventArgs> ConnectClicked;
         public event EventHandler<ArchipelagoCommandEventArgs> CommandReceived;
         public event EventHandler UnstuckClicked;
+        public bool UnstuckVisible
+        {
+            get
+            {
+                return _unstuckVisible;
+            }
+            set
+            {
+                if (_unstuckVisible != value)
+                {
+                    _unstuckVisible = value; OnPropertyChanged();
+                }
+            }
+        }
         public bool ConnectButtonEnabled
         {
             get

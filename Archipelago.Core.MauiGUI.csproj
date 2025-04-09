@@ -8,7 +8,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-    <Version>0.0.31</Version>
+    <Version>0.0.32</Version>
     <Authors>ArsonAssassin</Authors>
     <Product>Archipelago.Core.MauiGUI</Product>
     <PackageId>Archipelago.Core.MauiGUI</PackageId>
