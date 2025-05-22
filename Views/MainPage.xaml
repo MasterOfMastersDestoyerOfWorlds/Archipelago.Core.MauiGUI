@@ -14,7 +14,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding LogList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding LogList}" ItemsUpdatingScrollMode="{Binding AutoScrollMode}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
                                 <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
@@ -56,8 +56,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    
-                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding HintList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+
+                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding HintList}" ItemsUpdatingScrollMode="{Binding AutoScrollMode}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
                                 <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
@@ -87,10 +87,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
+                    <Grid.RowDefin>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding ItemList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                    <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding ItemList}" ItemsUpdatingScrollMode="{Binding AutoScrollMode}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:LogListItem">
                                 <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="0">
@@ -150,11 +150,23 @@
                     <Label Grid.Row="4" Grid.Column="0" VerticalOptions="Center" Text="LogLevel: " FontSize="12" TextColor="White"/>
                     <Picker Grid.Row="4" Grid.Column="1" ItemsSource="{Binding LogEventLevels}" SelectedItem="{Binding SelectedLogLevel}" TextColor="Black" BackgroundColor="DarkGrey"/>
                 </Grid>
-                <StackLayout VerticalOptions="End" Spacing="10">
-                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ClientVersion, StringFormat='Client Version: {0}' }" TextColor="White"/>
-                    <Label Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ArchipelagoVersion, StringFormat='Archipelago Version: {0}' }" TextColor="White"/>
-                    <Button Text="UNSTUCK" Command="{Binding UnstuckClickedCommand}" IsVisible="{Binding UnstuckVisible}" BackgroundColor="DarkGrey" TextColor="Black"/>
-                </StackLayout>
+                <Grid VerticalOptions="End" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ClientVersion, StringFormat='Client Version: {0}' }" TextColor="White"/>
+                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="{Binding ArchipelagoVersion, StringFormat='Archipelago Version: {0}' }" TextColor="White"/>
+                    <Label Grid.Row="2" Grid.Column="0" Padding="10" VerticalOptions="End" HorizontalOptions="Center" FontSize="12" Text="Toggle Autoscroll" TextColor="White"/>
+                    <Switch Grid.Row="2" Grid.Column="1" VerticalOptions="End" HorizontalOptions="Center" IsToggled="{Binding AutoscrollEnabled}"/>
+                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="UNSTUCK" Command="{Binding UnstuckClickedCommand}" IsVisible="{Binding UnstuckVisible}" BackgroundColor="DarkGrey" TextColor="Black"/>
+                </Grid>
             </StackLayout>
         </ContentPage>
     </FlyoutPage.Flyout>

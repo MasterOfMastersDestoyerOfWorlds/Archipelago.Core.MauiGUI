@@ -4,11 +4,14 @@ using Archipelago.Core.MauiGUI.Utils;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Serilog.Events;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using Color = Microsoft.Maui.Graphics.Color;
 
@@ -35,8 +38,16 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         private ObservableCollection<LogListItem> _itemList = new ObservableCollection<LogListItem>();
         private ICommand _unstuckClickedCommand;
         private bool _unstuckVisible;
+        private ItemsUpdatingScrollMode _autoscrollMode = ItemsUpdatingScrollMode.KeepLastItemInView;
+        private bool _autoscrollEnabled = true;
+        private readonly System.Timers.Timer _processingTimer;
+        private readonly object _processingLock = new();
+        private bool _isProcessingQueue = false;
+        private const int MAX_BATCH_SIZE = 25; // Process messages in batches
+        private const int TIMER_INTERVAL = 100; // Process queue every 100ms
+        private readonly ConcurrentQueue<LogListItem> _messageQueue = new();
 
-        public ObservableCollection<string> LogEventLevels { get; private set; } =Enum.GetNames(typeof(LogEventLevel)).ToObservableCollection();
+        public ObservableCollection<string> LogEventLevels { get; private set; } = Enum.GetNames(typeof(LogEventLevel)).ToObservableCollection();
         public string SelectedLogLevel
         {
             get
@@ -49,6 +60,21 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 if (_selectedLogLevel != value)
                 {
                     LoggerConfig.SetLogLevel(Enum.Parse<LogEventLevel>(value));
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public ItemsUpdatingScrollMode AutoScrollMode
+        {
+            get
+            {
+                return _autoscrollMode;
+            }
+            set
+            {
+                if (_autoscrollMode != value)
+                {
+                    _autoscrollMode = value;
                     OnPropertyChanged();
                 }
             }
@@ -81,6 +107,23 @@ namespace Archipelago.Core.MauiGUI.ViewModels
                 if (_connectButtonEnabled != value)
                 {
                     _connectButtonEnabled = value; OnPropertyChanged();
+                }
+            }
+        }
+        public bool AutoscrollEnabled
+        {
+            get
+            {
+                return _autoscrollEnabled;
+            }
+            set
+            {
+                if (_autoscrollEnabled != value)
+                {
+                    _autoscrollEnabled = value;
+                    OnPropertyChanged();
+
+                    AutoScrollMode = _autoscrollEnabled ? ItemsUpdatingScrollMode.KeepLastItemInView : ItemsUpdatingScrollMode.KeepItemsInView;
                 }
             }
         }
@@ -263,26 +306,75 @@ namespace Archipelago.Core.MauiGUI.ViewModels
             ClientVersion = Helpers.GetAppVersion();
             ArchipelagoVersion = archipelagoVersion;
 
-            LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => LogMessage(a, l));
+            _processingTimer = new System.Timers.Timer(TIMER_INTERVAL);
+            _processingTimer.Elapsed += ProcessMessageQueue;
+            _processingTimer.AutoReset = true;
+            _processingTimer.Start();
+
+            LoggerConfig.Initialize((e, l) => WriteLine(e, l), (a, l) => WriteLine(a, l));
         }
-        private void WriteLine(string output, LogEventLevel level)
+        public void WriteLine(string output, LogEventLevel level)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                LogList.Add(new LogListItem(output, GetColorForLogLevel(level)));
-
-            });
-
+            _messageQueue.Enqueue(new LogListItem(output, GetColorForLogLevel(level)));
         }
-        private void LogMessage(APMessageModel output, LogEventLevel level)
+        public void WriteLine(APMessageModel output, LogEventLevel level)
         {
-
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                LogList.Add(new LogListItem(output));
-            });
-
+            _messageQueue.Enqueue(new LogListItem(output));
         }
+
+        private void ProcessMessageQueue(object sender, ElapsedEventArgs e)
+        {
+            // Prevent multiple concurrent processing
+            if (_isProcessingQueue)
+                return;
+
+
+            lock (_processingLock)
+            {
+                try
+                {
+                    _isProcessingQueue = true;
+
+                    List<LogListItem> textBatch = new();
+                    int processedCount = 0;
+
+                    while (_messageQueue.TryDequeue(out var item) && processedCount < MAX_BATCH_SIZE)
+                    {
+                        textBatch.Add(item);
+                        processedCount++;
+                    }
+
+                    if (textBatch.Count > 0)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            if (textBatch.Count > 0)
+                            {
+                                foreach (var item in textBatch)
+                                {
+                                    LogList.Add(item);
+                                }
+                            }
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error processing message queue: {ex.Message}");
+                }
+                finally
+                {
+                    _isProcessingQueue = false;
+                }
+            }
+        }
+        public override void Dispose()
+        {
+            _processingTimer?.Stop();
+            _processingTimer?.Dispose();
+            base.Dispose();
+        }
+
         private Color GetColorForLogLevel(LogEventLevel level)
         {
             Color logColor;
