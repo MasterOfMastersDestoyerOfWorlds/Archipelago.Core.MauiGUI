@@ -21,7 +21,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Archipelago.Core" Version="0.3.24" />
+		<ProjectReference Include="..\Core\Archipelago.Core.csproj" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="System.Text.Json" Version="9.0.0" />
