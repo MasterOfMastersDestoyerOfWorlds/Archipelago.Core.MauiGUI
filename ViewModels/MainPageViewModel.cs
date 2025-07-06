@@ -300,7 +300,10 @@ namespace Archipelago.Core.MauiGUI.ViewModels
         }
         public MainPageViewModel(string archipelagoVersion = "0.5.1")
         {
-            ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { Host = Host, Slot = Slot, Password = Password }); });
+            ConnectClickedCommand = new Command(() => { ConnectClicked?.Invoke(this, new ConnectClickedEventArgs { 
+                Host = string.IsNullOrWhiteSpace(Host) ? "127.0.0.1:38281" : Host, 
+                Slot = string.IsNullOrWhiteSpace(Slot) ? "Player1" : Slot, 
+                Password = Password }); });
             CommandSentCommand = new Command(() => { CommandReceived?.Invoke(this, new ArchipelagoCommandEventArgs { Command = CommandText }); CommandText = string.Empty; });
             UnstuckClickedCommand = new Command(() => { UnstuckClicked?.Invoke(this, EventArgs.Empty); });
             ClientVersion = Helpers.GetAppVersion();
