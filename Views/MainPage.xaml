@@ -87,7 +87,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefin>
+                    <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <CollectionView Grid.Row="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ItemsSource="{Binding ItemList}" ItemsUpdatingScrollMode="{Binding AutoScrollMode}">
@@ -137,7 +137,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center" Text="Host: " FontSize="12" TextColor="White"/>
-                    <Entry Grid.Row="0" Grid.Column="1" Placeholder="Enter Host e.g. Archipelago.gg:38281" FontSize="12" Text="{Binding Host, Mode=TwoWay}"  TextColor="Black" BackgroundColor="DarkGrey"/>
+                    <Entry Grid.Row="0" Grid.Column="1" Placeholder="127.0.0.1:38281" FontSize="12" Text="{Binding Host, Mode=TwoWay}"  TextColor="Black" BackgroundColor="DarkGrey"/>
 
                     <Label Grid.Row="1" Grid.Column="0" VerticalOptions="Center" Text="Slot: " FontSize="12" TextColor="White"/>
                     <Entry Grid.Row="1" Grid.Column="1" Placeholder="Enter Slot e.g. Player1" FontSize="12" Text="{Binding Slot, Mode=TwoWay}" TextColor="Black" BackgroundColor="DarkGrey"/>
